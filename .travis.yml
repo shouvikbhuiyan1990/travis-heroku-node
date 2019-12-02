@@ -2,5 +2,9 @@ language: node_js
 node_js:
   - 12.3.1
 script:
-  - "npm run lint"
   - "npm run test"
+  - "node server/index.js"
+deploy:
+  provider: heroku
+  api_key: dbd655c2-5800-4ae4-9534-132c361ace41
+  app: stormy-beach-49745
