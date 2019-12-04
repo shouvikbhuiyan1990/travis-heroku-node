@@ -1,10 +1,13 @@
 
 const mongoose = require('mongoose');
+const config = require('../../config/mongo');
 
-const dbName = 'user-db';
+const env = process.env.NODE_ENV || 'development';
 
-// const connectionUrl = `mongodb://127.0.0.1:27017/${dbName}`;
-const connectionUrl = "mongodb+srv://shouvik:M1234@cluster0-yanec.mongodb.net/test?retryWrites=true&w=majority";
+const localUrl = `mongodb://${config[env].host}/${config[env].dbName}`;
+const prodUrl = config[env]['env-variable'];
+
+const connectionUrl = prodUrl ? prodUrl : localUrl;
 
 const connect = mongoose.connect(connectionUrl, {
     useNewUrlParser: true
