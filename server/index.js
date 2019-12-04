@@ -2,9 +2,25 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const path = require('path');
 const app = express();
+// const mongoClient = require('mongodb').MongoClient;
+const Users = require('./models/users');
 
 const { UserProvider } = require('./apis');
 
+// const client = new mongoClient(connectionUrl, { useNewUrlParser: true });
+
+// client.connect((err, client)=> {
+//     if(err) {
+//         console.log('Not Able to Connect', err);
+//     }
+//     else {
+//         const db = client.db(databaseName);
+//         db.collection('users').insertOne({
+//             name: 'first',
+//             dob: '24/09/1990'
+//         });
+//     }
+// });
 
 const apis = new UserProvider();
 
@@ -14,6 +30,16 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(bodyParser.json());
+
+app.post('/saveUsersWithdb', (req, res) => {
+    debugger
+    const user = new Users(req.body);
+    user.save().then(() => {
+        res.send(user);
+    }).catch((e)=> {
+        res.status(400).send(e);
+    })
+});
 
 app.get('/getUsers', function (req, res) {
     apis.fetchAllUsers(function(error, users) {
