@@ -10,8 +10,7 @@ const prodUrl = config[env]['env-variable'];
 const connectionUrl = prodUrl ? prodUrl : localUrl;
 
 const connect = mongoose.connect(connectionUrl, {
-    useNewUrlParser: true,
-    useCreateIndex: true
+    useNewUrlParser: true
 });
 
 module.exports = connect;
