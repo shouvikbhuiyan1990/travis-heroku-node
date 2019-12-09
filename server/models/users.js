@@ -2,6 +2,7 @@ const connect = require('../db/connection');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const schema = mongoose.Schema({
     email: {
@@ -38,7 +39,13 @@ const schema = mongoose.Schema({
                 throw new Error('password cannot contain the phrase password');
             }   
         }
-    }
+    },
+    tokens: [{
+        token: {
+            type: String,
+            required: true
+        }
+    }]
 });
 
 schema.pre('save', async function (next) {
@@ -50,6 +57,14 @@ schema.pre('save', async function (next) {
 
     next();
 });
+
+//methods add a function to each instances of the USER schena where as statics add the function directly on the schema level
+schema.methods.generateToken = async function() {
+    const user = this;
+    const token = jwt.sign({ _id: user._id }, 'mysecretkey');
+
+    user.tokens = user.tokens.concat({ token });
+}
 
 const Users = mongoose.model('users', schema);
 

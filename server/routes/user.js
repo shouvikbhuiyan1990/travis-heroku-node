@@ -5,6 +5,7 @@ const Users = require('../models/users');
 
 router.post('/users/saveOne', async (req, res) => {
     const user = new Users(req.body);
+    const token = await user.generateToken();
     try {
         await user.save();
         res.status(201).send(user);
