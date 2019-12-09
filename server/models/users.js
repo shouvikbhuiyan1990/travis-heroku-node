@@ -66,6 +66,20 @@ schema.methods.generateToken = async function() {
     user.tokens = user.tokens.concat({ token });
 }
 
+schema.statics.findByEmailPassword = async function (email, password) {
+    const user = await Users.findOne({ email: email });
+    if(!user) {
+        throw new Error('Unable to find the user!');
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if( !isMatch ) {
+        throw new Error('Mismatch!');
+    }
+
+    return user;
+}
+
 const Users = mongoose.model('users', schema);
 
 module.exports = Users;
