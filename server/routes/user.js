@@ -44,6 +44,18 @@ router.post('/users/logout', auth, async (req, res) => {
     }
 });
 
+router.get('/users/getTasksByUser', auth, async (req, res) => { 
+    try {
+        const user = await Users.findById(req.user._id);
+        debugger;
+        await user.populate('tasks').execPopulate();
+        res.send(user.tasks);
+    }
+    catch(e) {
+        res.status(400).send(e);
+    }
+});
+
 router.post('/users/login', authLogin, async (req, res) => {
     
     try {

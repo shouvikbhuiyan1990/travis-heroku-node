@@ -48,6 +48,12 @@ const schema = mongoose.Schema({
     }]
 });
 
+schema.virtual('tasks', {
+    ref: 'tasks',
+    localField: '_id',
+    foreignField: 'owner'
+});
+
 schema.pre('save', async function (next) {
     const user = this;
     
